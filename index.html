@@ -13,7 +13,7 @@
 
       <form>
         <input type="button" name="btn-add" onclick="addItem(document.getElementsByName('txt')[0].value)" value="+">
-        <input type="text" name="txt">
+        <input type="text" name="txt" onkeypress="addItemOnKey(event)">
       </form>
 
       <ul id="tasks" onclick="checkElement(event)"></ul>

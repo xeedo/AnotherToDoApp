@@ -1,21 +1,12 @@
 function getTasks() {
-  // Gets task froma storage and places them on the list
   if (localStorage.length > 0) {
-    // populate tasks list
+    // populate tasks list from localStorage
     for (var i = 1; i <= localStorage.length; i++) {
       var task = localStorage.getItem("task" + i);
       $("#tasks").append(task);
     }
-
     return true;
   }
-
-  if(localStorage.length == 0) {
-    console.log("no storage items");
-    return false;
-  }
-
-  console.log(localStorage.length);
 }
 
 function checkElement(event) {
@@ -30,7 +21,6 @@ function checkElement(event) {
     item.parentNode.classList.remove("open");
     item.parentNode.classList.add("closed");
 
-    // change task in storage
     localStorage.setItem(taskID, item.parentNode.outerHTML);
     return true;
   }
@@ -43,9 +33,16 @@ function checkElement(event) {
     item.parentNode.classList.remove("closed");
     item.parentNode.classList.add("open");
 
-    // change task in storage
     localStorage.setItem(taskID, item.parentNode.outerHTML);
     return true;
+  }
+
+  if (item.classList[1] == "fa-trash-o") {
+    let taskID = item.previousSibling.id;
+
+    $("#" + taskID).remove();
+    item.parentNode.removeChild(item); // remove the trash icon
+    localStorage.removeItem(taskID);
   }
 
 }
@@ -58,7 +55,8 @@ function addItem(itemTxt) {
     item += "<li class=\"open\" id=task" + taskID + ">";
     item += "<i class=\"fa fa-square-o\"></i>";
     item += itemTxt;
-    item += "</li>"
+    item += "</li>";
+    item += "<i class=\"fa fa-trash-o\"></i>";
 
     $("UL").append(item);
 
@@ -67,4 +65,11 @@ function addItem(itemTxt) {
 
     document.getElementsByName("txt")[0].value = ""; // clear input box
   }
+}
+
+function addItemOnKey(event) {
+  if (event.charCode == 13) {
+    event.preventDefault();
+    addItem(event.target.value);
+  };
 }
